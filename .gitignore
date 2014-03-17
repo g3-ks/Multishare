@@ -4,5 +4,7 @@
 *.jar
 *.war
 *.ear
-Multishare/bin/
-Multishare/gen/
+Multishare.apk
+classes.dex
+resources.ap_
+R.java
