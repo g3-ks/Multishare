@@ -4,5 +4,5 @@
 *.jar
 *.war
 *.ear
-bin/
-gen/
+Multishare/bin/
+Multishare/gen/
