@@ -2,5 +2,7 @@
 
     <string name="app_name">Multishare</string>
     <string name="button_share_name">Share</string>
+    <string name="add_account">Add Account</string>
+     
 
 </resources>
