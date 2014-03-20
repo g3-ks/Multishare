@@ -8,4 +8,5 @@ Multishare.apk
 classes.dex
 resources.ap_
 R.java
-bin/
+Multishare/bin/
+Multishare/gen/
