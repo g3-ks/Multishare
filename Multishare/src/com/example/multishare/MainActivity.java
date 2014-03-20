@@ -40,8 +40,6 @@ public class MainActivity extends Activity{
 	public void shareMessage(View view){
 		EditText editText1 = (EditText) findViewById(R.id.editText1);
 		String message = editText1.getText().toString();
-		EditText editText2 = (EditText) findViewById(R.id.editText2);
-		editText2.setText(message);
 		
 		// Starting PreviewActivity and passing a string
 		Intent intent = new Intent(this, PreviewActivity.class);
