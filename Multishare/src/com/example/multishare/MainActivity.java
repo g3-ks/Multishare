@@ -1,6 +1,7 @@
 package com.example.multishare;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -18,8 +19,11 @@ public class MainActivity extends Activity{
 		String message = editText1.getText().toString();
 		EditText editText2 = (EditText) findViewById(R.id.editText2);
 		editText2.setText(message);
+		
+		// Starting PreviewActivity and passing a string
+		Intent intent = new Intent(this, PreviewActivity.class);
+		intent.putExtra("statusUpdate", message);
+		startActivity(intent);
 	}
-	
-	
-	
+		
 }
