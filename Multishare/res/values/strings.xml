@@ -3,6 +3,7 @@
     <string name="app_name">Multishare</string>
     <string name="button_share_name">Share</string>
     <string name="add_account">Add Account</string>
+    <string name="enter_message">Enter message&#8230;</string>
      
-
+	
 </resources>

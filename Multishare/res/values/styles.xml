@@ -1,22 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="@android:style/Theme.Holo.Light"></style>
-
-    <style name="CustomActionBarTheme" parent="@android:style/Theme.Holo">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="android:actionMenuTextColor">#FFFFFF</item>
+    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat">
+        <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#11979E</item>
-    </style>
-
-    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="background">@color/action_bar_blue</item>
     </style>
 
 </resources>
