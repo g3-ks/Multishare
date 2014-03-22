@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
@@ -44,6 +45,12 @@ public class MainActivity extends ActionBarActivity{
 		Intent intent = new Intent(this, PreviewActivity.class);
 		intent.putExtra("statusUpdate", message);
 		startActivity(intent);
+	}
+	
+	public boolean addAccount(MenuItem item) {
+		Intent intent = new Intent(this, AddAccountActivity.class);
+		startActivity(intent);
+		return true;
 	}
 
 }
