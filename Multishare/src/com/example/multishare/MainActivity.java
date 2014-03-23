@@ -1,25 +1,28 @@
 package com.example.multishare;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
-public class MainActivity extends Activity{
+public class MainActivity extends ActionBarActivity{
 	
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public static final int ACTION_BAR_COLOUR = 0xFF3F9FE0;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
-		setupActionBar();
+		
+		// Sets action bar's colour to colour defined in ACTION_BAR_COLOUR 
+		getSupportActionBar().setBackgroundDrawable(new ColorDrawable(ACTION_BAR_COLOUR));
 	}
+	
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -28,15 +31,12 @@ public class MainActivity extends Activity{
 	    inflater.inflate(R.menu.menu, menu);
 	    return super.onCreateOptionsMenu(menu);
 	}
-	
-	@SuppressLint("NewApi")
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
-	}
 
+	
+	/**
+	 * Function called when "Share" button is pressed
+	 * @param view
+	 */
 	public void shareMessage(View view){
 		EditText editText1 = (EditText) findViewById(R.id.editText1);
 		String message = editText1.getText().toString();
@@ -45,6 +45,12 @@ public class MainActivity extends Activity{
 		Intent intent = new Intent(this, PreviewActivity.class);
 		intent.putExtra("statusUpdate", message);
 		startActivity(intent);
+	}
+	
+	public boolean addAccount(MenuItem item) {
+		Intent intent = new Intent(this, AddAccountActivity.class);
+		startActivity(intent);
+		return true;
 	}
 
 }
