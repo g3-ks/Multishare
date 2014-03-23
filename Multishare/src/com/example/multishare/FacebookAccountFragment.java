@@ -1,5 +1,7 @@
 package com.example.multishare;
 
+import java.util.Arrays;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,6 +33,7 @@ public class FacebookAccountFragment extends Fragment {
 		View view = inflater.inflate(R.layout.add_account_layout, container, false);
 		LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
 		authButton.setFragment(this);
+		authButton.setReadPermissions(Arrays.asList("email"));
 		
 		return view;
 	}
