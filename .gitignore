@@ -10,3 +10,5 @@ Multishare.apk
 classes.dex
 resources.ap_
 R.java
+lint.xml
+project.properties
