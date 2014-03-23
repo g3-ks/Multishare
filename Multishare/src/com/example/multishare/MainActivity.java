@@ -34,10 +34,10 @@ public class MainActivity extends ActionBarActivity{
 
 	
 	/**
-	 * Function called when "Share" button is pressed
+	 * Function called when "Preview" button is pressed
 	 * @param view
 	 */
-	public void shareMessage(View view){
+	public void previewMessage(View view){
 		EditText editText1 = (EditText) findViewById(R.id.editText1);
 		String message = editText1.getText().toString();
 		
