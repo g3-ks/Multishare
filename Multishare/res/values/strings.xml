@@ -13,5 +13,6 @@
     <string name="login">Login</string>
     <string name="instructions">Login to create a link to fetch account data</string>
     <string name="logout">Log out</string>
+    <string name="user_name"></string>
 
 </resources>

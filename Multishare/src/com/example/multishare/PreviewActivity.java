@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class PreviewActivity extends ActionBarActivity {
 
@@ -34,6 +36,12 @@ public class PreviewActivity extends ActionBarActivity {
 	public void previewStatus() {
 		TextView facebookStatus = (TextView) findViewById(R.id.facebookStatus);
 		facebookStatus.setText(facebookString);
+	}
+	
+	public void shareMessage(View view) {
+		Intent intent = new Intent(this, MainActivity.class);
+		Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
+		startActivity(intent);
 	}
 
 }
