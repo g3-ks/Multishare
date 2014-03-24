@@ -13,6 +13,13 @@
     <string name="login">Login</string>
     <string name="instructions">Login to create a link to fetch account data</string>
     <string name="logout">Log out</string>
+    <string name="cont">Continue</string>
+    <string name="cancelled">Cancelled</string>
+    <string name="permission_not_granted">Unable to perform selected action</string>
     <string name="user_name"></string>
+    <string name="success">SUCCESS</string>
+     <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
+    <string name="error">Error</string>
+    <string name="ok">OK</string>
 
 </resources>

@@ -4,6 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -13,6 +15,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.Session;
@@ -141,7 +144,28 @@ public class AddAccountActivity extends Activity {
 	public void onSaveInstanceState(Bundle outState) {
 	    super.onSaveInstanceState(outState);
 	    uiHelper.onSaveInstanceState(outState);
+	    
 	}
+	
+	public void returnSession(View view) {
+		//Session session = Session.getActiveSession();
+		Intent intent = new Intent(this, MainActivity.class);
+		if(user != null) {
+			Log.d(TAG, "user is not null - returnSession");
+			JSONObject jsonObj = user.getInnerJSONObject();
+			String jsonString = jsonObj.toString();
+			Bundle bundle = new Bundle();
+			bundle.putString("user", jsonString);
+			intent.putExtras(bundle);
+		}
+		else {
+			Log.d(TAG, "user is  null - returnSession");
+		}
+		startActivity(intent);
+	       
+	}
+	
+	
 	
 	
 	
