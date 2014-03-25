@@ -21,5 +21,6 @@
      <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
+    <string name="twitter_login">Login With Twitter</string>
 
 </resources>

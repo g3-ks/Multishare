@@ -22,16 +22,21 @@
         facebook:layout_height="wrap_content"
         facebook:layout_gravity="center_horizontal"
         facebook:layout_marginTop="30dp" />
-    
-     <Button
-        facebook:id="@+id/return_button"
-        facebook:layout_width="wrap_content"
-        facebook:layout_height="wrap_content"
-        facebook:background="@drawable/button_selector"
-        facebook:onClick="returnSession"
-        facebook:text="@string/cont" />
-    
-    
 
+     <Button
+         facebook:id="@+id/button1"
+         facebook:layout_width="176dp"
+         facebook:layout_height="wrap_content"
+         facebook:layout_gravity="center"
+         facebook:text="@string/twitter_login" />
+
+     <Button
+         facebook:id="@+id/return_button"
+         facebook:layout_width="wrap_content"
+         facebook:layout_height="wrap_content"
+         facebook:layout_gravity="center"
+         facebook:background="@drawable/button_selector"
+         facebook:onClick="returnSession"
+         facebook:text="@string/cont" />
 
 </LinearLayout>
