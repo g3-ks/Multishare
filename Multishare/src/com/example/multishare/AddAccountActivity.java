@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
@@ -18,6 +20,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -27,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.text.Html;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -219,40 +223,61 @@ public class AddAccountActivity extends Activity {
                 updateUI();
             }
         });
-	}
 	
-
-	private void loginToTwitter() {
-		// TODO Auto-generated method stub
+	//-------Twitter---------
+	
 		if (!isTwitterLoggedInAlready()) {
-			ConfigurationBuilder builder = new ConfigurationBuilder();
-			builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
-			builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
-			Configuration configuration = builder.build();
-			
-			TwitterFactory factory = new TwitterFactory(configuration);
-			twitter = factory.getInstance();
+		Uri uri = getIntent().getData();
+		if (uri != null && uri.toString().startsWith(TWITTER_CALLBACK_URL)) {
+			// oAuth verifier
+			String verifier = uri
+					.getQueryParameter(URL_TWITTER_OAUTH_VERIFIER);
 
 			try {
-				requestToken = twitter
-						.getOAuthRequestToken(TWITTER_CALLBACK_URL);
-				this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
-						.parse(requestToken.getAuthenticationURL())));
-			} catch (TwitterException e) {
-				e.printStackTrace();
-			}
-		} else {
-			// user already logged into twitter
-			Toast.makeText(getApplicationContext(),
-					"Already Logged into twitter", Toast.LENGTH_LONG).show();
-		}
-	}
+				// Get the access token
+				AccessToken accessToken = twitter.getOAuthAccessToken(
+						requestToken, verifier);
 
-	private boolean isTwitterLoggedInAlready() {
-		// TODO Auto-generated method stub
-		
-		return mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+				// Shared Preferences
+				Editor e = mSharedPreferences.edit();
+
+				// After getting access token, access token secret
+				// store them in application preferences
+				e.putString(PREF_KEY_OAUTH_TOKEN, accessToken.getToken());
+				e.putString(PREF_KEY_OAUTH_SECRET,
+						accessToken.getTokenSecret());
+				// Store login status - true
+				e.putBoolean(PREF_KEY_TWITTER_LOGIN, true);
+				e.commit(); // save changes
+
+				Log.e("Twitter OAuth Token", "> " + accessToken.getToken());
+
+				// Hide login button
+				//btnLoginTwitter.setVisibility(View.GONE);
+
+				// Show Update Twitter
+//				lblUpdate.setVisibility(View.VISIBLE);
+//				txtUpdate.setVisibility(View.VISIBLE);
+//				btnUpdateStatus.setVisibility(View.VISIBLE);
+//				btnLogoutTwitter.setVisibility(View.VISIBLE);
+				
+				// Getting user details from twitter
+				// For now i am getting his name only
+				long userID = accessToken.getUserId();
+				User user = twitter.showUser(userID);
+				String username = user.getName();
+				
+				// Displaying in xml ui
+				lblUserName.setText(Html.fromHtml("<b>Welcome " + username + "</b>"));
+			} catch (Exception e) {
+				// Check log for login errors
+				Log.e("Twitter Login Error", "> " + e.getMessage());
+			}
+			}
+		}
+
 	}
+	
 
 	private void updateUI() {
 	        Session session = Session.getActiveSession();
@@ -321,7 +346,38 @@ public class AddAccountActivity extends Activity {
 	       
 	}
 	
-	
+	//---------twitter-------
+	private void loginToTwitter() {
+		// TODO Auto-generated method stub
+		if (!isTwitterLoggedInAlready()) {
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
+			Configuration configuration = builder.build();
+			
+			TwitterFactory factory = new TwitterFactory(configuration);
+			twitter = factory.getInstance();
+
+			try {
+				requestToken = twitter
+						.getOAuthRequestToken(TWITTER_CALLBACK_URL);
+				this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+						.parse(requestToken.getAuthenticationURL())));
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		} else {
+			// user already logged into twitter
+			Toast.makeText(getApplicationContext(),
+					"Already Logged into twitter", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private boolean isTwitterLoggedInAlready() {
+		// TODO Auto-generated method stub
+		
+		return mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+	}
 	
 	
 	
