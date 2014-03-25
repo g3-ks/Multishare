@@ -45,7 +45,11 @@ public class PreviewActivity extends ActionBarActivity {
 	private Button shareButton;
 
 	private UiLifecycleHelper uiHelper;
-
+	
+	private Boolean FacebookEnable;
+	private Boolean TwitterEnable;
+	private Boolean LinkedInEnable;
+	
 	private enum PendingAction {
 		NONE, POST_PHOTO, POST_STATUS_UPDATE
 	}
@@ -93,6 +97,19 @@ public class PreviewActivity extends ActionBarActivity {
 		if(bundle != null) {
 			Log.d(TAG, "bundle is not null");
 			String jsonString = bundle.getString("user");
+			
+			FacebookEnable = bundle.getBoolean("FacebookEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+FacebookEnable);
+			
+			TwitterEnable = bundle.getBoolean("TwitterEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+TwitterEnable);
+			
+			LinkedInEnable = bundle.getBoolean("LinkedInEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+LinkedInEnable);
+			
 			try {
 				JSONObject jsonObj = new JSONObject(jsonString);
 				user = GraphObject.Factory.create(jsonObj, GraphUser.class);
@@ -143,28 +160,42 @@ public class PreviewActivity extends ActionBarActivity {
 		Intent intent = new Intent(this, MainActivity.class);
 		Session session = Session.getActiveSession();
 
-		if (session != null) {
-			Log.d(TAG, "Session is not null");
-			performPublish(PendingAction.POST_STATUS_UPDATE,
-					canPresentShareDialog);
-			Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
-			if(user != null) {
-				Log.d(TAG, "user is not null - returnSession");
-				JSONObject jsonObj = user.getInnerJSONObject();
-				String jsonString = jsonObj.toString();
-				Bundle bundle = new Bundle();
-				bundle.putString("user", jsonString);
-				intent.putExtras(bundle);
+		// Post to Facebook
+		if(FacebookEnable == true ){
+
+			if (session != null) {
+				Log.d(TAG, "Session is not null");
+				performPublish(PendingAction.POST_STATUS_UPDATE,
+						canPresentShareDialog);
+				Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
+				if(user != null) {
+					Log.d(TAG, "user is not null - returnSession");
+					JSONObject jsonObj = user.getInnerJSONObject();
+					String jsonString = jsonObj.toString();
+					Bundle bundle = new Bundle();
+					bundle.putString("user", jsonString);
+					intent.putExtras(bundle);
+				}
+				else {
+					Log.d(TAG, "user is  null - returnSession");
+				}
+
+			} else {
+				Toast.makeText(this, "Post unsuccessful", Toast.LENGTH_SHORT)
+				.show();
 			}
-			else {
-				Log.d(TAG, "user is  null - returnSession");
-			}
-			
-		} else {
-			Toast.makeText(this, "Post unsuccessful", Toast.LENGTH_SHORT)
-					.show();
 		}
-		adapter.updateStatus(facebookString, new MessageListener(), true);
+		
+		// Post to Twitter
+		if(TwitterEnable == true){
+			adapter.updateStatus(facebookString, new MessageListener(), true);
+		}
+		
+		// Post to LinkedIn
+		if(LinkedInEnable == true){
+			
+		}
+		
 		startActivity(intent);
 	}
 

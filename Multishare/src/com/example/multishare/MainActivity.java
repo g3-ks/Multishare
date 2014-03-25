@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.facebook.Request;
@@ -37,10 +38,20 @@ public class MainActivity extends ActionBarActivity{
 	
 	private SocialAuthAdapter adapter;
 	
+	protected CheckBox postToFacebook;
+	
+	private CheckBox postToTwitter;
+	
+	private CheckBox postToLinkedIn;
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
+		
+		postToFacebook = (CheckBox) this.findViewById(R.id.checkBoxFacebook);
+		postToTwitter = (CheckBox) this.findViewById(R.id.checkBoxTwitter);
+		postToLinkedIn = (CheckBox) this.findViewById(R.id.checkBoxLinkedIn);
 		
 		session = Session.getActiveSession();
 		if(session != null) {	
@@ -123,6 +134,7 @@ public class MainActivity extends ActionBarActivity{
 		EditText editText1 = (EditText) findViewById(R.id.editText1);
 		String message = editText1.getText().toString();
 		Bundle bundle = new Bundle();
+		
 		// Starting PreviewActivity and passing a string
 		Intent intent = new Intent(this, PreviewActivity.class);
 		if(user != null) {
@@ -131,8 +143,22 @@ public class MainActivity extends ActionBarActivity{
 			
 			bundle.putString("user", jsonString);
 			
-		}
-//		intent.putExtra("statusUpdate", message);
+		}		
+		
+		// Attach booleans from checkboxes
+		bundle.putBoolean("FacebookEnable", postToFacebook.isChecked());
+		Log.d(TAG,"Value of postToFacebook in MainActivity");
+		Log.d(TAG,""+postToFacebook.isChecked());
+		
+		bundle.putBoolean("TwitterEnable", postToTwitter.isChecked());
+		Log.d(TAG,"Value of postToTwitter in MainActivity");
+		Log.d(TAG,""+postToTwitter.isChecked());
+		
+		bundle.putBoolean("LinkedInEnable", postToLinkedIn.isChecked());
+		Log.d(TAG,"Value of postToLinkedIn in MainActivity");
+		Log.d(TAG,""+postToLinkedIn.isChecked());
+		
+		//intent.putExtra("statusUpdate", message);
 		//intent.putExtra("facebook_sess", this.session);
 		bundle.putString("statusUpdate", message);
 		intent.putExtras(bundle);
