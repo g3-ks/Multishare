@@ -1,5 +1,9 @@
 package com.example.multishare;
 
+import org.brickred.socialauth.android.DialogListener;
+import org.brickred.socialauth.android.SocialAuthAdapter;
+import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
+import org.brickred.socialauth.android.SocialAuthError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,8 +17,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
@@ -32,6 +34,8 @@ public class MainActivity extends ActionBarActivity{
 	private Session session;
 	
 	private GraphUser user;
+	
+	private SocialAuthAdapter adapter;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,9 +96,13 @@ public class MainActivity extends ActionBarActivity{
 			}
 		}
 		else {
-			Log.d(TAG, "bundle is null");
-			return;
+			Log.d(TAG, "bundle is null");	
 		}
+		//Twitter stuff
+		
+
+		
+		
 	}
 	
 	
@@ -129,6 +137,7 @@ public class MainActivity extends ActionBarActivity{
 		bundle.putString("statusUpdate", message);
 		intent.putExtras(bundle);
 		startActivity(intent);
+
 	}
 	
 	public boolean addAccount(MenuItem item) {
@@ -136,5 +145,7 @@ public class MainActivity extends ActionBarActivity{
 		startActivity(intent);
 		return true;
 	}
+	
+	
 
 }
