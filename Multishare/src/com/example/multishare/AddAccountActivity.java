@@ -7,24 +7,36 @@ import java.util.Arrays;
 import org.json.JSONObject;
 
 import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
 import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.multishare.MainActivity;
+import com.example.multishare.R;
 import com.example.multishare.AlertDialogManager;
 import com.example.multishare.ConnectionDetector;
 import com.facebook.Session;
@@ -116,10 +128,15 @@ public class AddAccountActivity extends Activity {
 	    }
 	}
 	
-	
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//-------new Twitter Code-----------
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		//----------------------------
 		uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);
 		PackageInfo info;
@@ -144,6 +161,26 @@ public class AddAccountActivity extends Activity {
 		}
 		
 		setContentView(R.layout.add_account_layout);
+		/*
+		// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+					// Internet Connection is not present
+					alert.showAlertDialog(MainActivity.this, "Internet Connection Error",
+							"Please connect to working Internet connection", false);
+					// stop executing code by return
+					return;
+				}
+				
+				// Check if twitter keys are set
+				if(TWITTER_CONSUMER_KEY.trim().length() == 0 || TWITTER_CONSUMER_SECRET.trim().length() == 0){
+					// Internet Connection is not present
+					alert.showAlertDialog(MainActivity.this, "Twitter oAuth tokens", "Please set your twitter oauth tokens first!", false);
+					// stop executing code by return
+					return;
+				}
+*/
+		
+		
 		
 		authButton = (LoginButton) findViewById(R.id.authButton);
 		//profile_picture = (ProfilePictureView) findViewById(R.id.profilePicture);		
@@ -151,6 +188,30 @@ public class AddAccountActivity extends Activity {
 		
 		user_name = (TextView)findViewById(R.id.user_name);	
 		authButton.setReadPermissions(Arrays.asList("email"));
+		
+		btnLoginTwitter = (Button) findViewById(R.id.twitterlogin);
+//		btnUpdateStatus = (Button) findViewById(R.id.btnUpdateStatus);
+//		btnLogoutTwitter = (Button) findViewById(R.id.btnLogoutTwitter);
+//		txtUpdate = (EditText) findViewById(R.id.txtUpdateStatus);
+//		lblUpdate = (TextView) findViewById(R.id.lblUpdate);
+//		lblUserName = (TextView) findViewById(R.id.lblUserName);
+		mSharedPreferences = getApplicationContext().getSharedPreferences(
+				"MyPref", 0);
+		
+		btnLoginTwitter.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				// Call login twitter function
+				loginToTwitter();
+			}
+		});
+
+		
+		
+		
+		
+		
 		authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
 			@Override
             public void onUserInfoFetched(GraphUser user) {
@@ -160,7 +221,40 @@ public class AddAccountActivity extends Activity {
         });
 	}
 	
-	 private void updateUI() {
+
+	private void loginToTwitter() {
+		// TODO Auto-generated method stub
+		if (!isTwitterLoggedInAlready()) {
+			ConfigurationBuilder builder = new ConfigurationBuilder();
+			builder.setOAuthConsumerKey(TWITTER_CONSUMER_KEY);
+			builder.setOAuthConsumerSecret(TWITTER_CONSUMER_SECRET);
+			Configuration configuration = builder.build();
+			
+			TwitterFactory factory = new TwitterFactory(configuration);
+			twitter = factory.getInstance();
+
+			try {
+				requestToken = twitter
+						.getOAuthRequestToken(TWITTER_CALLBACK_URL);
+				this.startActivity(new Intent(Intent.ACTION_VIEW, Uri
+						.parse(requestToken.getAuthenticationURL())));
+			} catch (TwitterException e) {
+				e.printStackTrace();
+			}
+		} else {
+			// user already logged into twitter
+			Toast.makeText(getApplicationContext(),
+					"Already Logged into twitter", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private boolean isTwitterLoggedInAlready() {
+		// TODO Auto-generated method stub
+		
+		return mSharedPreferences.getBoolean(PREF_KEY_TWITTER_LOGIN, false);
+	}
+
+	private void updateUI() {
 	        Session session = Session.getActiveSession();
 	       
 	        if (user != null) {

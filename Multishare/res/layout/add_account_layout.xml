@@ -24,7 +24,7 @@
         facebook:layout_marginTop="30dp" />
 
      <Button
-         facebook:id="@+id/button1"
+         facebook:id="@+id/twitterlogin"
          facebook:layout_width="176dp"
          facebook:layout_height="wrap_content"
          facebook:layout_gravity="center"
