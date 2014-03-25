@@ -10,8 +10,13 @@ import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
 import org.brickred.socialauth.android.SocialAuthError;
 import org.json.JSONObject;
 
+import twitter4j.Twitter;
+import twitter4j.auth.RequestToken;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -21,8 +26,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -33,6 +40,49 @@ import com.facebook.widget.ProfilePictureView;
 
 public class AddAccountActivity extends Activity {
 
+	//----------------Twitter Constant-----
+	
+	static String TWITTER_CONSUMER_KEY = "wuF5iNzZ8qgTTtkCggaisw"; // place your cosumer key here
+	static String TWITTER_CONSUMER_SECRET = "r0ydU55XMSCO3QnwAZBdMglYHVKMZ3PtV10jc6Eo8"; // place your consumer secret here
+
+	// Preference Constants
+	static String PREFERENCE_NAME = "twitter_oauth";
+	static final String PREF_KEY_OAUTH_TOKEN = "oauth_token";
+	static final String PREF_KEY_OAUTH_SECRET = "oauth_token_secret";
+	static final String PREF_KEY_TWITTER_LOGIN = "isTwitterLogedIn";
+
+	static final String TWITTER_CALLBACK_URL = "oauth://t4jsample";
+
+	// Twitter oauth urls
+	static final String URL_TWITTER_AUTH = "auth_url";
+	static final String URL_TWITTER_OAUTH_VERIFIER = "oauth_verifier";
+	static final String URL_TWITTER_OAUTH_TOKEN = "oauth_token";
+
+	// Login button
+	Button btnLoginTwitter;
+	// Update status button
+	Button btnUpdateStatus;
+	// Logout button
+	Button btnLogoutTwitter;
+	// EditText for update
+	EditText txtUpdate;
+	// lbl update
+	TextView lblUpdate;
+	TextView lblUserName;
+
+	// Progress dialog
+	ProgressDialog pDialog;
+
+	// Twitter
+	private static Twitter twitter;
+	private static RequestToken requestToken;
+	
+	// Shared Preferences
+	private static SharedPreferences mSharedPreferences;
+	
+	
+	//-------------------------------------
+	
 	private LoginButton authButton;
 	
 	private ProfilePictureView profile_picture;
