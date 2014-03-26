@@ -1,37 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:facebook="http://schemas.android.com/apk/res/android"
-    facebook:layout_width="match_parent"
-    facebook:layout_height="match_parent"
-    facebook:orientation="vertical" >
-    
-    <TextView
-        facebook:id="@+id/user_name"
-        facebook:layout_width="wrap_content"
-        facebook:layout_height="wrap_content"
-        facebook:layout_gravity="center" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-    <com.facebook.widget.ProfilePictureView
-        facebook:id="@+id/profilePicture"
-        facebook:layout_width="wrap_content"
-        facebook:layout_height="wrap_content"
-        facebook:layout_gravity="center" />
+    <TextView
+        android:id="@+id/user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp" />
 
     <com.facebook.widget.LoginButton
-        facebook:id="@+id/authButton"
-        facebook:layout_width="wrap_content"
-        facebook:layout_height="wrap_content"
-        facebook:layout_gravity="center_horizontal"
-        facebook:layout_marginTop="30dp" />
-    
-     <Button
-        facebook:id="@+id/return_button"
-        facebook:layout_width="wrap_content"
-        facebook:layout_height="wrap_content"
-        facebook:background="@drawable/button_selector"
-        facebook:onClick="returnSession"
-        facebook:text="@string/cont" />
-    
-    
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/twitter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/twitter"
+            android:onClick="twitterClick" />
+
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_selector2"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:onClick="twitterSignOut"
+            android:text="SIGN OUT" />
+
+    </LinearLayout>
+    
+     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/linked_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/linkedin"
+            android:onClick="linkedInClick" />
+
+        <Button
+            android:id="@+id/sign_out_button_linked_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button_selector2"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:onClick="linkedInSignOut"
+            android:text="SIGN OUT" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="bottom|right"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/return_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_margin="20dp"
+            android:background="@drawable/button_selector"
+            android:onClick="returnSession"
+            android:text="@string/cont" />
+    </LinearLayout>
 
 </LinearLayout>
