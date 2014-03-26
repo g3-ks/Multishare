@@ -28,4 +28,23 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/button_selector" />
 
+    <CheckBox
+        android:id="@+id/checkBoxFacebook"
+        android:text="Post to Facebook" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <CheckBox
+        android:id="@+id/checkBoxTwitter"
+        android:text="Post to Twitter" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <CheckBox
+        android:id="@+id/checkBoxLinkedIn"
+        android:text="Post to LinkedIn" 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
