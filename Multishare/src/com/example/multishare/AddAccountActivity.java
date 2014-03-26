@@ -4,6 +4,10 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import org.brickred.socialauth.android.DialogListener;
+import org.brickred.socialauth.android.SocialAuthAdapter;
+import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
+import org.brickred.socialauth.android.SocialAuthError;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -16,7 +20,9 @@ import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -31,6 +37,14 @@ public class AddAccountActivity extends Activity {
 	
 	private ProfilePictureView profile_picture;
 	
+	Button twitter_button;
+	
+	Button linked_in_button;
+	
+	Button signOut_linked_in;
+	
+	Button signOut;
+	
 	private TextView user_name;
 	
 	private GraphUser user;
@@ -38,6 +52,15 @@ public class AddAccountActivity extends Activity {
 	private UiLifecycleHelper uiHelper;
 		
 	private static final String TAG = "debug";
+	
+	private SocialAuthAdapter adapter;
+	
+	private SocialAuthAdapter adapter2;
+	
+	int count = 0;
+	
+	MyApplication myApp;
+	MyApplication myApp2;
 	
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 	    @Override
@@ -81,12 +104,13 @@ public class AddAccountActivity extends Activity {
 		    
 		}
 		
+		
+		
 		setContentView(R.layout.add_account_layout);
 		
+		//facebook stuff
 		authButton = (LoginButton) findViewById(R.id.authButton);
 		//profile_picture = (ProfilePictureView) findViewById(R.id.profilePicture);		
-		
-		
 		user_name = (TextView)findViewById(R.id.user_name);	
 		authButton.setReadPermissions(Arrays.asList("email"));
 		authButton.setUserInfoChangedCallback(new LoginButton.UserInfoChangedCallback() {
@@ -96,6 +120,26 @@ public class AddAccountActivity extends Activity {
                 updateUI();
             }
         });
+		
+		//Twitter stuff
+		adapter = new SocialAuthAdapter(new ResponseListener());
+		adapter.addProvider(Provider.TWITTER, R.drawable.twitter);
+		adapter.addProvider(Provider.LINKEDIN, R.drawable.linkedin);
+		//adapter.addCallBack(Provider.TWITTER, "http://google.com");
+	
+		try {
+			adapter.addConfig(Provider.TWITTER, "wuF5iNzZ8qgTTtkCggaisw", "r0ydU55XMSCO3QnwAZBdMglYHVKMZ3PtV10jc6Eo8", null);
+			adapter.addConfig(Provider.LINKEDIN, "bh82t52rdos6", "zQ1LLrGbhDZ36fH8", null);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		twitter_button = (Button)findViewById(R.id.twitter_button);
+		linked_in_button = (Button)findViewById(R.id.linked_in_button);
+		signOut = (Button)findViewById(R.id.sign_out_button);
+		
+		
+		
 	}
 	
 	 private void updateUI() {
@@ -150,22 +194,89 @@ public class AddAccountActivity extends Activity {
 	public void returnSession(View view) {
 		//Session session = Session.getActiveSession();
 		Intent intent = new Intent(this, MainActivity.class);
+		Bundle bundle = new Bundle();
 		if(user != null) {
 			Log.d(TAG, "user is not null - returnSession");
 			JSONObject jsonObj = user.getInnerJSONObject();
 			String jsonString = jsonObj.toString();
-			Bundle bundle = new Bundle();
 			bundle.putString("user", jsonString);
 			intent.putExtras(bundle);
 		}
 		else {
 			Log.d(TAG, "user is  null - returnSession");
 		}
+			
+		
+
+
 		startActivity(intent);
 	       
 	}
 	
+	private final class ResponseListener implements DialogListener {
+		@Override
+		public void onComplete(Bundle values) {
+
+			// Variable to receive message status
+			Log.d("Share-Bar", "Authentication Successful");
+
+			// Get name of provider after authentication
+			final String providerName = values.getString(SocialAuthAdapter.PROVIDER);
+			Log.d("Share-Bar", "Provider Name = " + providerName);
+			Toast.makeText(AddAccountActivity.this, providerName + " connected", Toast.LENGTH_SHORT).show();
+
+			myApp = (MyApplication) getApplication();
+			myApp.setSocialAuthAdapter(adapter);
+			
 	
+			
+			// Please avoid sending duplicate message. Social Media Providers
+			// block duplicate messages.
+
+		}
+		
+		@Override
+		public void onError(SocialAuthError error) {
+			error.printStackTrace();
+			Log.d("Share-Bar", error.getMessage());
+		}
+
+		@Override
+		public void onCancel() {
+			Log.d("Share-Bar", "Authentication Cancelled");
+		}
+
+		@Override
+		public void onBack() {
+			Log.d("Share-Bar", "Dialog Closed by pressing Back Key");
+
+		}
+		
+	}	
+	
+	public void linkedInClick(View view) {
+		adapter.enable(linked_in_button);
+	}
+	
+	public void linkedInSignOut(View view) {
+		
+	}
+	
+	public void twitterClick(View view) {
+		adapter.enable(twitter_button);
+		Log.d(TAG, "Twitter CLICK");
+		if(count % 2 == 1) {
+			adapter.getCurrentProvider().logout();
+			Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+		}
+		count++;
+	}
+	
+	public void twitterSignOut(View view) {
+		
+		adapter.signOut(myApp, "twitter");
+		Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+	}
 	
 	
 	

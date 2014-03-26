@@ -1,7 +1,10 @@
 package com.example.multishare;
 
-import java.util.Date;
-
+import org.brickred.socialauth.android.DialogListener;
+import org.brickred.socialauth.android.SocialAuthAdapter;
+import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
+import org.brickred.socialauth.android.SocialAuthError;
+import org.brickred.socialauth.android.SocialAuthListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +41,8 @@ public class PreviewActivity extends ActionBarActivity {
 	private Session session;
 	private boolean canPresentShareDialog;
 	private static final String PERMISSION = "publish_actions";
+	private SocialAuthAdapter adapter;
+	private Button shareButton;
 
 	private UiLifecycleHelper uiHelper;
 
@@ -67,6 +73,7 @@ public class PreviewActivity extends ActionBarActivity {
 	}
 
 	private PendingAction pendingAction = PendingAction.NONE;
+	private MyApplication myapp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +125,8 @@ public class PreviewActivity extends ActionBarActivity {
 			Log.d(TAG, "session is null - on create");
 		}
 		
+		myapp = (MyApplication)getApplication();
+		adapter = myapp.getSocialAuthAdapter();
 		
 
 	}
@@ -138,7 +147,7 @@ public class PreviewActivity extends ActionBarActivity {
 			Log.d(TAG, "Session is not null");
 			performPublish(PendingAction.POST_STATUS_UPDATE,
 					canPresentShareDialog);
-			Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Mesasage posted on Facebook", Toast.LENGTH_SHORT).show();
 			if(user != null) {
 				Log.d(TAG, "user is not null - returnSession");
 				JSONObject jsonObj = user.getInnerJSONObject();
@@ -151,12 +160,15 @@ public class PreviewActivity extends ActionBarActivity {
 				Log.d(TAG, "user is  null - returnSession");
 			}
 			
-			startActivity(intent);
 		} else {
-			Toast.makeText(this, "Post unsuccessful", Toast.LENGTH_SHORT)
+			Toast.makeText(this, "Facebok post unsuccessful", Toast.LENGTH_SHORT)
 					.show();
-			startActivity(intent);
 		}
+
+		adapter.updateStatus(facebookString, new MessageListener(), false);
+		
+		
+		startActivity(intent);
 	}
 
 	private void performPublish(PendingAction action, boolean allowNoSession) {
@@ -295,6 +307,9 @@ public class PreviewActivity extends ActionBarActivity {
 		// analytics and advertising reporting. Do so in
 		// the onResume methods of the primary Activities that an app may be
 		// launched into.
+		
+		//Twitter stuff
+		
 		AppEventsLogger.activateApp(this);
 	}
 
@@ -308,6 +323,24 @@ public class PreviewActivity extends ActionBarActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		uiHelper.onDestroy();
+	}
+	
+	
+	
+	private final class MessageListener implements SocialAuthListener<Integer> {
+		@Override
+		public void onExecute(String provider, Integer t) {
+			Integer status = t;
+			if (status.intValue() == 200 || status.intValue() == 201 || status.intValue() == 204)
+				Toast.makeText(PreviewActivity.this, "Message posted on " + provider, Toast.LENGTH_LONG).show();
+			else
+				Toast.makeText(PreviewActivity.this, "Message not posted on " + provider, Toast.LENGTH_LONG).show();
+		}
+
+		@Override
+		public void onError(SocialAuthError e) {
+
+		}
 	}
 
 }
