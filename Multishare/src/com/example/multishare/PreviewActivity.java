@@ -147,7 +147,7 @@ public class PreviewActivity extends ActionBarActivity {
 			Log.d(TAG, "Session is not null");
 			performPublish(PendingAction.POST_STATUS_UPDATE,
 					canPresentShareDialog);
-			Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Mesasage posted on Facebook", Toast.LENGTH_SHORT).show();
 			if(user != null) {
 				Log.d(TAG, "user is not null - returnSession");
 				JSONObject jsonObj = user.getInnerJSONObject();
@@ -161,10 +161,13 @@ public class PreviewActivity extends ActionBarActivity {
 			}
 			
 		} else {
-			Toast.makeText(this, "Post unsuccessful", Toast.LENGTH_SHORT)
+			Toast.makeText(this, "Facebok post unsuccessful", Toast.LENGTH_SHORT)
 					.show();
 		}
-		adapter.updateStatus(facebookString, new MessageListener(), true);
+
+		adapter.updateStatus(facebookString, new MessageListener(), false);
+		
+		
 		startActivity(intent);
 	}
 

@@ -39,6 +39,12 @@ public class AddAccountActivity extends Activity {
 	
 	Button twitter_button;
 	
+	Button linked_in_button;
+	
+	Button signOut_linked_in;
+	
+	Button signOut;
+	
 	private TextView user_name;
 	
 	private GraphUser user;
@@ -49,7 +55,12 @@ public class AddAccountActivity extends Activity {
 	
 	private SocialAuthAdapter adapter;
 	
+	private SocialAuthAdapter adapter2;
+	
+	int count = 0;
+	
 	MyApplication myApp;
+	MyApplication myApp2;
 	
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 	    @Override
@@ -113,17 +124,19 @@ public class AddAccountActivity extends Activity {
 		//Twitter stuff
 		adapter = new SocialAuthAdapter(new ResponseListener());
 		adapter.addProvider(Provider.TWITTER, R.drawable.twitter);
-		adapter.addCallBack(Provider.TWITTER, "http://google.com");
+		adapter.addProvider(Provider.LINKEDIN, R.drawable.linkedin);
+		//adapter.addCallBack(Provider.TWITTER, "http://google.com");
 	
 		try {
 			adapter.addConfig(Provider.TWITTER, "wuF5iNzZ8qgTTtkCggaisw", "r0ydU55XMSCO3QnwAZBdMglYHVKMZ3PtV10jc6Eo8", null);
+			adapter.addConfig(Provider.LINKEDIN, "bh82t52rdos6", "zQ1LLrGbhDZ36fH8", null);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
 		twitter_button = (Button)findViewById(R.id.twitter_button);
-		adapter.enable(twitter_button);
-		
-		
+		linked_in_button = (Button)findViewById(R.id.linked_in_button);
+		signOut = (Button)findViewById(R.id.sign_out_button);
 		
 		
 		
@@ -214,6 +227,9 @@ public class AddAccountActivity extends Activity {
 
 			myApp = (MyApplication) getApplication();
 			myApp.setSocialAuthAdapter(adapter);
+			
+	
+			
 			// Please avoid sending duplicate message. Social Media Providers
 			// block duplicate messages.
 
@@ -237,6 +253,30 @@ public class AddAccountActivity extends Activity {
 		}
 		
 	}	
+	
+	public void linkedInClick(View view) {
+		adapter.enable(linked_in_button);
+	}
+	
+	public void linkedInSignOut(View view) {
+		
+	}
+	
+	public void twitterClick(View view) {
+		adapter.enable(twitter_button);
+		Log.d(TAG, "Twitter CLICK");
+		if(count % 2 == 1) {
+			adapter.getCurrentProvider().logout();
+			Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+		}
+		count++;
+	}
+	
+	public void twitterSignOut(View view) {
+		
+		adapter.signOut(myApp, "twitter");
+		Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show();
+	}
 	
 	
 	

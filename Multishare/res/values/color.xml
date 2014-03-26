@@ -3,4 +3,6 @@
     <color name="action_bar_blue">#11979E</color>
     <color name="purple">#990099</color>
     <color name="dark_purple">#660066</color>
+    <color name="twitter_blue">#73DEDE</color>
+    <color name="twitter_blue_dark">#027777</color>
 </resources>
