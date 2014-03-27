@@ -1,8 +1,6 @@
 package com.example.multishare;
 
-import org.brickred.socialauth.android.DialogListener;
 import org.brickred.socialauth.android.SocialAuthAdapter;
-import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
 import org.brickred.socialauth.android.SocialAuthError;
 import org.brickred.socialauth.android.SocialAuthListener;
 import org.json.JSONException;
@@ -15,7 +13,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,15 +31,13 @@ import com.facebook.widget.FacebookDialog;
 
 public class PreviewActivity extends ActionBarActivity {
 
-	String facebookString;
-	String twitterString;
-	private GraphUser user;
+	String status_update_msg;
+	private GraphUser facebook_user;
 	private static String TAG = "debug";
-	private Session session;
 	private boolean canPresentShareDialog;
 	private static final String PERMISSION = "publish_actions";
-	private SocialAuthAdapter adapter;
-	private Button shareButton;
+	private SocialAuthAdapter twitter_adapter;
+	private SocialAuthAdapter linkedIn_adapter;
 
 	private UiLifecycleHelper uiHelper;
 	
@@ -85,8 +80,6 @@ public class PreviewActivity extends ActionBarActivity {
 
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
-		
-		
 
 		setContentView(R.layout.preview_layout);
 
@@ -94,7 +87,7 @@ public class PreviewActivity extends ActionBarActivity {
 		Intent previewIntent = new Intent();
 		previewIntent = getIntent();
 		Bundle bundle = previewIntent.getExtras();
-		if(bundle != null) {
+		if (bundle != null) {
 			Log.d(TAG, "bundle is not null");
 			String jsonString = bundle.getString("user");
 			
@@ -112,17 +105,16 @@ public class PreviewActivity extends ActionBarActivity {
 			
 			try {
 				JSONObject jsonObj = new JSONObject(jsonString);
-				user = GraphObject.Factory.create(jsonObj, GraphUser.class);
-				 	
+				facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
+
 			} catch (JSONException e) {
-					e.printStackTrace();
+				e.printStackTrace();
 			}
-			
-			facebookString = bundle.getString("statusUpdate");
-		}
-		else {
+
+			status_update_msg = bundle.getString("statusUpdate");
+		} else {
 			Log.d(TAG, "bundle is null");
-			
+
 		}
 		// session = (Session)
 		// previewIntent.getSerializableExtra("facebook_sess");
@@ -138,14 +130,13 @@ public class PreviewActivity extends ActionBarActivity {
 				FacebookDialog.ShareDialogFeature.SHARE_DIALOG);
 
 		// sanity check
-		if (session.getActiveSession() == null) {
+		if (Session.getActiveSession() == null) {
 			Log.d(TAG, "session is null - on create");
 		}
-		
-		myapp = (MyApplication)getApplication();
-		adapter = myapp.getSocialAuthAdapter();
-		
 
+		myapp = (MyApplication) getApplication();
+		twitter_adapter = myapp.getTwitterAdapter();
+		linkedIn_adapter = myapp.getLinkedInAdapter();
 	}
 
 	/**
@@ -153,56 +144,47 @@ public class PreviewActivity extends ActionBarActivity {
 	 */
 	public void previewStatus() {
 		TextView facebookStatus = (TextView) findViewById(R.id.facebookStatus);
-		facebookStatus.setText(facebookString);
+		facebookStatus.setText(status_update_msg);
 	}
 
 	public void shareMessage(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		Session session = Session.getActiveSession();
+		Bundle bundle = new Bundle();
 
-		// Post to Facebook
-		if(FacebookEnable == true ){
-
-			if (session != null) {
-				Log.d(TAG, "Session is not null");
-				performPublish(PendingAction.POST_STATUS_UPDATE,
-						canPresentShareDialog);
-				Toast.makeText(this, "Post successful", Toast.LENGTH_SHORT).show();
-				if(user != null) {
-					Log.d(TAG, "user is not null - returnSession");
-					JSONObject jsonObj = user.getInnerJSONObject();
-					String jsonString = jsonObj.toString();
-					Bundle bundle = new Bundle();
-					bundle.putString("user", jsonString);
-					intent.putExtras(bundle);
-				}
-				else {
-					Log.d(TAG, "user is  null - returnSession");
-				}
+		if (session != null && FacebookEnable == true ) {
+			Log.d(TAG, "Session is not null");
+			performPublish(PendingAction.POST_STATUS_UPDATE,
+					canPresentShareDialog);
+			Toast.makeText(this, "Mesasage posted on Facebook",
+					Toast.LENGTH_SHORT).show();
+			bundle.putBoolean("SessionNullCheck", false);
+			if (facebook_user != null) {
+				Log.d(TAG, "user is not null - returnSession");
+				JSONObject jsonObj = facebook_user.getInnerJSONObject();
+				String jsonString = jsonObj.toString();
+				bundle.putBoolean("UserNullCheck", false);
+				bundle.putString("user", jsonString);
 
 			} else {
-				Toast.makeText(this, "Post unsuccessful", Toast.LENGTH_SHORT)
-				.show();
+				bundle.putBoolean("UserNullCheck", true);
+				Log.d(TAG, "user is  null - returnSession");
 			}
-		}
-		
-		// Post to Twitter
-		if(TwitterEnable == true){
-			adapter.updateStatus(facebookString, new MessageListener(), true);
-		}
-		
-		// Post to LinkedIn
-		if(LinkedInEnable == true){
-			
 
 		} else {
-			Toast.makeText(this, "Facebok post unsuccessful", Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, "Facebok post unsuccessful",
+					Toast.LENGTH_SHORT).show();
+			bundle.putBoolean("SessionNullCheck", true);
+		}
+		if(twitter_adapter != null && TwitterEnable == true) {
+			twitter_adapter.updateStatus(status_update_msg, new MessageListener(), false);
 		}
 
-		adapter.updateStatus(facebookString, new MessageListener(), false);
-		
-	
+		if(linkedIn_adapter != null && LinkedInEnable == true) {
+			linkedIn_adapter.updateStatus(status_update_msg, new MessageListener(), false);
+		}
+		bundle.putBoolean("FromPreviewActivity", true);
+		intent.putExtras(bundle);
 		startActivity(intent);
 	}
 
@@ -218,7 +200,8 @@ public class PreviewActivity extends ActionBarActivity {
 			} else if (session.isOpened()) {
 				// We need to get new permissions, then complete the action when
 				// we get called back.
-				Log.d(TAG, "Session already opened - create new publish permissions");
+				Log.d(TAG,
+						"Session already opened - create new publish permissions");
 				session.requestNewPublishPermissions(new Session.NewPermissionsRequest(
 						this, PERMISSION));
 				handlePendingAction();
@@ -256,35 +239,37 @@ public class PreviewActivity extends ActionBarActivity {
 			break;
 		}
 	}
-	
-	 private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
-	        @Override
-	        public void onError(FacebookDialog.PendingCall pendingCall, Exception error, Bundle data) {
-	            Log.d("HelloFacebook", String.format("Error: %s", error.toString()));
-	        }
 
-	        @Override
-	        public void onComplete(FacebookDialog.PendingCall pendingCall, Bundle data) {
-	            Log.d("HelloFacebook", "Success!");
-	        }
-	    };
-	
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
-    }
+	private FacebookDialog.Callback dialogCallback = new FacebookDialog.Callback() {
+		@Override
+		public void onError(FacebookDialog.PendingCall pendingCall,
+				Exception error, Bundle data) {
+			Log.d("HelloFacebook", String.format("Error: %s", error.toString()));
+		}
+
+		@Override
+		public void onComplete(FacebookDialog.PendingCall pendingCall,
+				Bundle data) {
+			Log.d("HelloFacebook", "Success!");
+		}
+	};
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
+	}
 
 	private void postStatusUpdate() {
 		if (canPresentShareDialog) {
 			Log.d(TAG, "share dialog is true");
 			FacebookDialog shareDialog = createShareDialogBuilder().build();
 			uiHelper.trackPendingDialogCall(shareDialog.present());
-			
+
 		}
-		if (user != null && hasPublishPermission()) {
+		if (facebook_user != null && hasPublishPermission()) {
 			Log.d(TAG, "user is not null and permission good");
-			final String message = facebookString;
+			final String message = status_update_msg;
 			Request request = Request.newStatusUpdateRequest(
 					Session.getActiveSession(), message, null, null,
 					new Request.Callback() {
@@ -342,9 +327,9 @@ public class PreviewActivity extends ActionBarActivity {
 		// analytics and advertising reporting. Do so in
 		// the onResume methods of the primary Activities that an app may be
 		// launched into.
-		
-		//Twitter stuff
-		
+
+		// Twitter stuff
+
 		AppEventsLogger.activateApp(this);
 	}
 
@@ -359,17 +344,20 @@ public class PreviewActivity extends ActionBarActivity {
 		super.onDestroy();
 		uiHelper.onDestroy();
 	}
-	
-	
-	
+
 	private final class MessageListener implements SocialAuthListener<Integer> {
 		@Override
 		public void onExecute(String provider, Integer t) {
 			Integer status = t;
-			if (status.intValue() == 200 || status.intValue() == 201 || status.intValue() == 204)
-				Toast.makeText(PreviewActivity.this, "Message posted on " + provider, Toast.LENGTH_LONG).show();
+			if (status.intValue() == 200 || status.intValue() == 201
+					|| status.intValue() == 204)
+				Toast.makeText(PreviewActivity.this,
+						"Message posted on " + provider, Toast.LENGTH_LONG)
+						.show();
 			else
-				Toast.makeText(PreviewActivity.this, "Message not posted on " + provider, Toast.LENGTH_LONG).show();
+				Toast.makeText(PreviewActivity.this,
+						"Message not posted on " + provider, Toast.LENGTH_LONG)
+						.show();
 		}
 
 		@Override

@@ -22,6 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginBottom="18dp"
         android:layout_marginRight="22dp"
+        android:padding="10dp"
         android:background="@drawable/button_selector"
         android:onClick="shareMessage"
         android:text="@string/button_share_name" />

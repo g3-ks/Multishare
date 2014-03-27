@@ -6,13 +6,22 @@ import android.app.Application;
 
 public class MyApplication extends Application {
 	
-	private SocialAuthAdapter socialAuthAdapter;
+	private SocialAuthAdapter twitter_adapter;
+	private SocialAuthAdapter linkedIn_adapter;
 	
-	public SocialAuthAdapter getSocialAuthAdapter(){
-		return socialAuthAdapter;
+	public SocialAuthAdapter getTwitterAdapter(){
+		return twitter_adapter;
+	}
+	
+	public SocialAuthAdapter getLinkedInAdapter(){
+		return linkedIn_adapter;
 	}
 
-	public void setSocialAuthAdapter (SocialAuthAdapter socialAuthAdapter){
-		this.socialAuthAdapter = socialAuthAdapter;
+	public void setTwitterAdapter(SocialAuthAdapter socialAuthAdapter){
+		this.twitter_adapter = socialAuthAdapter;
+	}
+	
+	public void setLinkedInAdapter(SocialAuthAdapter socialAuthAdapter){
+		this.linkedIn_adapter = socialAuthAdapter;
 	}
 }
