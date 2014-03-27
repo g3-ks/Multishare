@@ -6,20 +6,14 @@
     <string name="preview">Preview</string>
     <string name="enter_message">Enter message&#8230;</string>
     <string name="app_id">606468822768930</string>
-    <string name="login_using_activity">Login using Activity</string>
-    <string name="login_using_custom_fragment">Login using Custom Fragment</string>
-    <string name="login_using_usersettingsfragment">Login using UserSettingsFragment</string>
-    <string name="hello">Hello World, SessionLoginSampleActivity!</string>
-    <string name="login">Login</string>
-    <string name="instructions">Login to create a link to fetch account data</string>
     <string name="logout">Log out</string>
     <string name="cont">Continue</string>
     <string name="cancelled">Cancelled</string>
     <string name="permission_not_granted">Unable to perform selected action</string>
-    <string name="user_name"></string>
     <string name="success">SUCCESS</string>
-     <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
+    <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
+    <string name="sign_out">Sign Out</string>
 
 </resources>
