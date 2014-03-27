@@ -104,9 +104,10 @@ public class PreviewActivity extends ActionBarActivity {
 			Log.d(TAG,""+LinkedInEnable);
 			
 			try {
+				if(jsonString != null) {
 				JSONObject jsonObj = new JSONObject(jsonString);
 				facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
-
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
