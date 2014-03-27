@@ -1,5 +1,6 @@
 *.class
 *.properties
+*.classpath
 
 # Package Files #
 *.jar
@@ -11,3 +12,4 @@ Multishare.apk
 classes.dex
 resources.ap_
 R.java
+project.properties
