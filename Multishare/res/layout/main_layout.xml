@@ -31,21 +31,29 @@
 
     <CheckBox
         android:id="@+id/checkBoxFacebook"
-        android:text="Post to Facebook" 
+        android:text="Post to Facebook"
+        android:layout_marginTop="40dp"
+        android:textSize="20sp"
+        android:layout_gravity="center" 
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+       
+        />
 
     <CheckBox
         android:id="@+id/checkBoxTwitter"
-        android:text="Post to Twitter" 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="192dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Post to Twitter"
+        android:textSize="20sp" />
 
     <CheckBox
         android:id="@+id/checkBoxLinkedIn"
-        android:text="Post to LinkedIn" 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Post to LinkedIn"
+        android:textSize="20sp" />
 
 </LinearLayout>

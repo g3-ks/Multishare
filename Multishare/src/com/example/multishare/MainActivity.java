@@ -46,6 +46,8 @@ public class MainActivity extends ActionBarActivity {
 	private CheckBox postToTwitter;
 
 	private CheckBox postToLinkedIn;
+	
+	MyApplication myApp;
 
 	// uiHelper class helps keep track of a facebook session states between activities
 	private UiLifecycleHelper uiHelper;
@@ -133,6 +135,13 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onResume() {
+		
+		myApp = (MyApplication)getApplication();
+		
+		if(myApp.getTwitterAdapter() == null) {
+			Log.d(TAG, "Twitter adapter is NULL");
+		}
+		
 		super.onResume();
 		uiHelper.onResume();
 

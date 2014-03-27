@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:padding="20dp"
             android:background="@drawable/twitter" />
 
         <Button
@@ -64,7 +65,7 @@
             android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/button_selector2"
+            android:background="@drawable/button_selector3"
             android:onClick="linkedInSignOut"
             android:text="@string/sign_out" />
     </LinearLayout>
