@@ -113,10 +113,10 @@ public class MainActivity extends ActionBarActivity {
 			Log.d(TAG, "bundle is not null");
 			String jsonString = bundle.getString("user");
 			try {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				facebook_user = GraphObject.Factory.create(jsonObj,
-						GraphUser.class);
-
+				if(jsonString!=null){
+					JSONObject jsonObj = new JSONObject(jsonString);
+					facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

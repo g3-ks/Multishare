@@ -171,7 +171,7 @@ public class PreviewActivity extends ActionBarActivity {
 				Log.d(TAG, "user is  null - returnSession");
 			}
 
-		} else {
+		} if(session == null) {
 			Toast.makeText(this, "Facebok post unsuccessful",
 					Toast.LENGTH_SHORT).show();
 			bundle.putBoolean("SessionNullCheck", true);
