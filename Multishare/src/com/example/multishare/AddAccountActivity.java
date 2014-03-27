@@ -84,6 +84,8 @@ public class AddAccountActivity extends ActionBarActivity {
 	private Button twitter_button;
 
 	private Button linked_in_button;
+	private Button signOut_twitter;
+	private Button signOut_linkedin;
 
 	private TextView user_name;
 
@@ -167,9 +169,15 @@ public class AddAccountActivity extends ActionBarActivity {
 		// Twitter stuff
 		twitter_adapter = new SocialAuthAdapter(new ResponseListener());
 		twitter_adapter.addProvider(Provider.TWITTER, R.drawable.twitter);
+		signOut_twitter = (Button) findViewById(R.id.sign_out_button_twitter);
+		signOut_twitter.setEnabled(false);
+		signOut_twitter.setVisibility(View.INVISIBLE);
 
 		linked_in_adapter = new SocialAuthAdapter(new ResponseListener());
 		linked_in_adapter.addProvider(Provider.LINKEDIN, R.drawable.linkedin);
+		signOut_linkedin = (Button) findViewById(R.id.sign_out_button_linked_in);
+		signOut_linkedin.setEnabled(false);
+		signOut_linkedin.setVisibility(View.INVISIBLE);
 		// adapter.addCallBack(Provider.TWITTER, "http://google.com");
 
 		try {
@@ -273,6 +281,15 @@ public class AddAccountActivity extends ActionBarActivity {
 			Log.d("Share-Bar", "Provider Name = " + providerName);
 			Toast.makeText(AddAccountActivity.this,
 					providerName + " connected", Toast.LENGTH_SHORT).show();
+			
+			if(providerName.equals("twitter")){
+				signOut_twitter.setEnabled(true);
+				signOut_twitter.setVisibility(View.VISIBLE);
+
+			} else {
+				signOut_linkedin.setEnabled(true);
+				signOut_linkedin.setVisibility(View.VISIBLE);
+			}
 
 			myApp = (MyApplication) getApplication();
 			myApp.setTwitterAdapter(twitter_adapter);
@@ -305,6 +322,8 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	public void linkedInSignOut(View view) {
 		linked_in_adapter.signOut(myApp, "linkedin");
+		signOut_linkedin.setEnabled(false);
+		signOut_linkedin.setVisibility(View.INVISIBLE);
 		Toast.makeText(this, "Signed out from LinkedIn", Toast.LENGTH_SHORT)
 				.show();
 	}
@@ -313,6 +332,8 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	public void twitterSignOut(View view) {
 		twitter_adapter.signOut(myApp, "twitter");
+		signOut_twitter.setEnabled(false);
+		signOut_twitter.setVisibility(View.INVISIBLE);
 		Toast.makeText(this, "Signed out from Twitter", Toast.LENGTH_SHORT)
 				.show();
 	}
