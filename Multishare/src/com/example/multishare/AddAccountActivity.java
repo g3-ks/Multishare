@@ -1,3 +1,6 @@
+/**
+ * Authors: Alshahna Jamal, Keval Shah, David Hu, Hao Yang
+ */
 package com.example.multishare;
 
 import java.security.MessageDigest;
@@ -151,10 +154,8 @@ public class AddAccountActivity extends ActionBarActivity {
 		getSupportActionBar().setBackgroundDrawable(
 				new ColorDrawable(MainActivity.ACTION_BAR_COLOUR));
 
-		// facebook stuff
+		// facebook login set up using the FaceBook SDK
 		authButton = (LoginButton) findViewById(R.id.authButton);
-		// profile_picture = (ProfilePictureView)
-		// findViewById(R.id.profilePicture);
 		user_name = (TextView) findViewById(R.id.user_name);
 		authButton.setReadPermissions(Arrays.asList("email"));
 		authButton
@@ -166,13 +167,14 @@ public class AddAccountActivity extends ActionBarActivity {
 					}
 				});
 
-		// Twitter stuff
+		// Twitter login set up through the SocialAuthAdapter SDK
 		twitter_adapter = new SocialAuthAdapter(new ResponseListener());
 		twitter_adapter.addProvider(Provider.TWITTER, R.drawable.twitter);
 		signOut_twitter = (Button) findViewById(R.id.sign_out_button_twitter);
 		signOut_twitter.setEnabled(false);
 		signOut_twitter.setVisibility(View.INVISIBLE);
 
+		// Linkedin login set up through the SocialAuthAdapter SDK
 		linked_in_adapter = new SocialAuthAdapter(new ResponseListener());
 		linked_in_adapter.addProvider(Provider.LINKEDIN, R.drawable.linkedin);
 		signOut_linkedin = (Button) findViewById(R.id.sign_out_button_linked_in);
@@ -208,7 +210,6 @@ public class AddAccountActivity extends ActionBarActivity {
 
 		if (user != null) {
 			user_name.setText(user.getName());
-			// profile_picture.setProfileId(user.getId());
 		} else {
 			user_name.setText(null);
 		}
@@ -250,8 +251,12 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * This function returns the loggin in facebook user and 
+	 * session to the next invoked activity: Main Activity
+	 */
 	public void returnSession(View view) {
-		// Session session = Session.getActiveSession();
+		
 		Intent intent = new Intent(this, MainActivity.class);
 		Bundle bundle = new Bundle();
 		if (user != null) {
@@ -268,6 +273,11 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	}
 
+	/**
+	 * Class takes in the configuration of Linkedin and 
+	 * Twitter and completes the login process
+	 *
+	 */
 	private final class ResponseListener implements DialogListener {
 		@Override
 		public void onComplete(Bundle values) {
@@ -319,7 +329,10 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	}
 
-
+	/**
+	 * Logs out user from linkedin and hides sign out
+	 * button in the UI
+	 */
 	public void linkedInSignOut(View view) {
 		linked_in_adapter.signOut(myApp, "linkedin");
 		signOut_linkedin.setEnabled(false);
@@ -329,6 +342,10 @@ public class AddAccountActivity extends ActionBarActivity {
 	}
 
 
+	/**
+	 * Logs out user from twitter and hides sign out
+	 * button in the UI
+	 */
 
 	public void twitterSignOut(View view) {
 		twitter_adapter.signOut(myApp, "twitter");

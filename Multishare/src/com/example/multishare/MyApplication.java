@@ -1,8 +1,22 @@
+/**
+ * Authors: Alshahna Jamal, Keval Shah, David Hu, Hao Yang
+ */
 package com.example.multishare;
 
 import org.brickred.socialauth.android.SocialAuthAdapter;
 
 import android.app.Application;
+
+/**
+ * This class is used to get and set the adapters
+ * for this specific application. 
+ * 
+ * Linkedin and Twitter are made compatible for Multishare
+ * through the use of the SocialAuthAdapter SDK. They both
+ * have their own adapters through here so that users can control
+ * posting to one, both or neither.
+ *
+ */
 
 public class MyApplication extends Application {
 	

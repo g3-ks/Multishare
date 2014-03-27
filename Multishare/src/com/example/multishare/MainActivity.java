@@ -1,3 +1,6 @@
+/**
+ * Authors: Alshahna Jamal, Keval Shah, David Hu, Hao Yang
+ */
 package com.example.multishare;
 
 import org.brickred.socialauth.android.DialogListener;
@@ -44,6 +47,7 @@ public class MainActivity extends ActionBarActivity {
 
 	private CheckBox postToLinkedIn;
 
+	// uiHelper class helps keep track of a facebook session states between activities
 	private UiLifecycleHelper uiHelper;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -65,12 +69,13 @@ public class MainActivity extends ActionBarActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState); 
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
 		Log.d(TAG, "Main activity - oncreate");
 		setContentView(R.layout.main_layout);
 
+		// the user's way of choosing which social media to post to -- through these checkboxes
 		postToFacebook = (CheckBox) this.findViewById(R.id.checkBoxFacebook);
 		postToTwitter = (CheckBox) this.findViewById(R.id.checkBoxTwitter);
 		postToLinkedIn = (CheckBox) this.findViewById(R.id.checkBoxLinkedIn);
@@ -131,6 +136,7 @@ public class MainActivity extends ActionBarActivity {
 		super.onResume();
 		uiHelper.onResume();
 
+		// get the opened session from add Account after an app has been deleted and relaunched
 		Session.openActiveSessionFromCache(this);
 		facebook_session = Session.getActiveSession();
 		if (facebook_session != null) {
@@ -153,6 +159,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 
+		// get the facebook user info from the add account activity
 		Intent intent = getIntent();
 		Log.d(TAG, "onResume");
 		Bundle bundle = intent.getExtras();
