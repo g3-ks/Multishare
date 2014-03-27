@@ -1,3 +1,6 @@
+/**
+ * Authors: Alshahna Jamal, Keval Shah, David Hu, Hao Yang
+ */
 package com.example.multishare;
 
 import org.brickred.socialauth.android.SocialAuthAdapter;
@@ -117,9 +120,6 @@ public class PreviewActivity extends ActionBarActivity {
 			Log.d(TAG, "bundle is null");
 
 		}
-		// session = (Session)
-		// previewIntent.getSerializableExtra("facebook_sess");
-		// Session.setActiveSession(session);
 
 		previewStatus();
 
@@ -148,6 +148,12 @@ public class PreviewActivity extends ActionBarActivity {
 		facebookStatus.setText(status_update_msg);
 	}
 
+	/**
+	 * This function enables the posting of a status
+	 * to the checked social media websites that were passed
+	 * from Main Activity to the Preview activity -- which invokes
+	 * the share button
+	 */
 	public void shareMessage(View view) {
 		Intent intent = new Intent(this, MainActivity.class);
 		Session session = Session.getActiveSession();
@@ -261,6 +267,9 @@ public class PreviewActivity extends ActionBarActivity {
 		uiHelper.onActivityResult(requestCode, resultCode, data, dialogCallback);
 	}
 
+	/**
+	 * This postStatusUpdate is specific to facebook only
+	 */
 	private void postStatusUpdate() {
 		if (canPresentShareDialog) {
 			Log.d(TAG, "share dialog is true");
@@ -324,13 +333,6 @@ public class PreviewActivity extends ActionBarActivity {
 		super.onResume();
 		uiHelper.onResume();
 
-		// Call the 'activateApp' method to log an app event for use in
-		// analytics and advertising reporting. Do so in
-		// the onResume methods of the primary Activities that an app may be
-		// launched into.
-
-		// Twitter stuff
-
 		AppEventsLogger.activateApp(this);
 	}
 
@@ -346,6 +348,11 @@ public class PreviewActivity extends ActionBarActivity {
 		uiHelper.onDestroy();
 	}
 
+	/**
+	 * The final stage for posting to Twitter and 
+	 * Linkedin happens here
+	 *
+	 */
 	private final class MessageListener implements SocialAuthListener<Integer> {
 		@Override
 		public void onExecute(String provider, Integer t) {
