@@ -47,6 +47,11 @@ public class MainActivity extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
+		
+        postToFacebook = (CheckBox) this.findViewById(R.id.checkBoxFacebook);
+        postToTwitter = (CheckBox) this.findViewById(R.id.checkBoxTwitter);
+        postToLinkedIn = (CheckBox) this.findViewById(R.id.checkBoxLinkedIn);
+		
 		facebook_session = Session.getActiveSession();
 		if (facebook_session != null) {
 			if (facebook_session.isOpened()) {
