@@ -14,6 +14,10 @@
     <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
     <string name="error">Error</string>
     <string name="ok">OK</string>
+<<<<<<< HEAD
+    <string name="twitter_login">Login With Twitter</string>
+=======
     <string name="sign_out">Sign Out</string>
+>>>>>>> 449bdadfb701a86ec063c775af6b6c845f39f9c5
 
 </resources>

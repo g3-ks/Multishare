@@ -40,7 +40,11 @@ public class PreviewActivity extends ActionBarActivity {
 	private SocialAuthAdapter linkedIn_adapter;
 
 	private UiLifecycleHelper uiHelper;
-
+	
+	private Boolean FacebookEnable;
+	private Boolean TwitterEnable;
+	private Boolean LinkedInEnable;
+	
 	private enum PendingAction {
 		NONE, POST_PHOTO, POST_STATUS_UPDATE
 	}
@@ -86,6 +90,19 @@ public class PreviewActivity extends ActionBarActivity {
 		if (bundle != null) {
 			Log.d(TAG, "bundle is not null");
 			String jsonString = bundle.getString("user");
+			
+			FacebookEnable = bundle.getBoolean("FacebookEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+FacebookEnable);
+			
+			TwitterEnable = bundle.getBoolean("TwitterEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+TwitterEnable);
+			
+			LinkedInEnable = bundle.getBoolean("LinkedInEnable");
+			Log.d(TAG,"Value of postToFacebook in MainActivity");
+			Log.d(TAG,""+LinkedInEnable);
+			
 			try {
 				JSONObject jsonObj = new JSONObject(jsonString);
 				facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
@@ -135,7 +152,7 @@ public class PreviewActivity extends ActionBarActivity {
 		Session session = Session.getActiveSession();
 		Bundle bundle = new Bundle();
 
-		if (session != null) {
+		if (session != null && FacebookEnable == true ) {
 			Log.d(TAG, "Session is not null");
 			performPublish(PendingAction.POST_STATUS_UPDATE,
 					canPresentShareDialog);
@@ -159,11 +176,11 @@ public class PreviewActivity extends ActionBarActivity {
 					Toast.LENGTH_SHORT).show();
 			bundle.putBoolean("SessionNullCheck", true);
 		}
-		if(twitter_adapter != null) {
+		if(twitter_adapter != null && TwitterEnable == true) {
 			twitter_adapter.updateStatus(status_update_msg, new MessageListener(), false);
 		}
-		
-		if(linkedIn_adapter != null) {
+
+		if(linkedIn_adapter != null && LinkedInEnable == true) {
 			linkedIn_adapter.updateStatus(status_update_msg, new MessageListener(), false);
 		}
 		bundle.putBoolean("FromPreviewActivity", true);
