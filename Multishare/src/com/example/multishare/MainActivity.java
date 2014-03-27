@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import com.facebook.Request;
@@ -34,12 +35,23 @@ public class MainActivity extends ActionBarActivity {
 	private Session facebook_session;
 
 	private GraphUser facebook_user;
+	
+	private CheckBox postToFacebook;
+	
+	private CheckBox postToTwitter;
+	
+	private CheckBox postToLinkedIn;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main_layout);
-
+		
+        postToFacebook = (CheckBox) this.findViewById(R.id.checkBoxFacebook);
+        postToTwitter = (CheckBox) this.findViewById(R.id.checkBoxTwitter);
+        postToLinkedIn = (CheckBox) this.findViewById(R.id.checkBoxLinkedIn);
+		
 		facebook_session = Session.getActiveSession();
 		if (facebook_session != null) {
 			if (facebook_session.isOpened()) {
@@ -101,10 +113,10 @@ public class MainActivity extends ActionBarActivity {
 			Log.d(TAG, "bundle is not null");
 			String jsonString = bundle.getString("user");
 			try {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				facebook_user = GraphObject.Factory.create(jsonObj,
-						GraphUser.class);
-
+				if(jsonString!=null){
+					JSONObject jsonObj = new JSONObject(jsonString);
+					facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
+				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -129,6 +141,7 @@ public class MainActivity extends ActionBarActivity {
 		String message = user_message.getText().toString();
 
 		Bundle bundle = new Bundle();
+
 		Intent intent = new Intent(this, PreviewActivity.class);
 
 		if (facebook_user != null) {
@@ -138,6 +151,20 @@ public class MainActivity extends ActionBarActivity {
 			// Convert JSON representation to a string and put into a bundle
 			bundle.putString("user", jsonObj.toString());
 		}
+
+		
+		// Attach booleans from checkboxes
+		bundle.putBoolean("FacebookEnable", postToFacebook.isChecked());
+		Log.d(TAG,"Value of postToFacebook in MainActivity");
+		Log.d(TAG,""+postToFacebook.isChecked());
+		
+		bundle.putBoolean("TwitterEnable", postToTwitter.isChecked());
+		Log.d(TAG,"Value of postToTwitter in MainActivity");
+		Log.d(TAG,""+postToTwitter.isChecked());
+		
+		bundle.putBoolean("LinkedInEnable", postToLinkedIn.isChecked());
+		Log.d(TAG,"Value of postToLinkedIn in MainActivity");
+		Log.d(TAG,""+postToLinkedIn.isChecked());
 
 		bundle.putString("statusUpdate", message);
 		intent.putExtras(bundle);
