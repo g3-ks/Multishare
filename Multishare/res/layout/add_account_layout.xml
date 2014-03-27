@@ -17,14 +17,57 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
 
-    <Button
-        android:id="@+id/twitter_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/twitter"
-        android:onClick="returnSession" />
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/twitter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/twitter" />
+
+        <Button
+            android:id="@+id/sign_out_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector2"
+            android:onClick="twitterSignOut"
+            android:text="@string/sign_out" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/linked_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/linkedin" />
+
+        <Button
+            android:id="@+id/sign_out_button_linked_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_selector2"
+            android:onClick="linkedInSignOut"
+            android:text="@string/sign_out" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_margin="20dp"
+            android:padding="10dp"
             android:background="@drawable/button_selector"
             android:onClick="returnSession"
             android:text="@string/cont" />
