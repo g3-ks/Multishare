@@ -49,7 +49,7 @@ public class PreviewActivity extends ActionBarActivity {
 	private Boolean LinkedInEnable;
 	
 	private enum PendingAction {
-		NONE, POST_PHOTO, POST_STATUS_UPDATE
+		NONE, POST_STATUS_UPDATE
 	}
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -108,8 +108,8 @@ public class PreviewActivity extends ActionBarActivity {
 			
 			try {
 				if(jsonString != null) {
-				JSONObject jsonObj = new JSONObject(jsonString);
-				facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
+					JSONObject jsonObj = new JSONObject(jsonString);
+					facebook_user = GraphObject.Factory.create(jsonObj, GraphUser.class);
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -118,7 +118,6 @@ public class PreviewActivity extends ActionBarActivity {
 			status_update_msg = bundle.getString("statusUpdate");
 		} else {
 			Log.d(TAG, "bundle is null");
-
 		}
 
 		previewStatus();
@@ -130,7 +129,7 @@ public class PreviewActivity extends ActionBarActivity {
 		canPresentShareDialog = FacebookDialog.canPresentShareDialog(this,
 				FacebookDialog.ShareDialogFeature.SHARE_DIALOG);
 
-		// sanity check
+		// Session null check
 		if (Session.getActiveSession() == null) {
 			Log.d(TAG, "session is null - on create");
 		}
@@ -179,7 +178,7 @@ public class PreviewActivity extends ActionBarActivity {
 			}
 
 		} if(session == null) {
-			Toast.makeText(this, "Facebok post unsuccessful",
+			Toast.makeText(this, "Facebook post unsuccessful",
 					Toast.LENGTH_SHORT).show();
 			bundle.putBoolean("SessionNullCheck", true);
 		}
@@ -237,9 +236,6 @@ public class PreviewActivity extends ActionBarActivity {
 		pendingAction = PendingAction.NONE;
 
 		switch (previouslyPendingAction) {
-		case POST_PHOTO:
-			// postPhoto();
-			break;
 		case POST_STATUS_UPDATE:
 			Log.d(TAG, "Post status update gonna happen");
 			postStatusUpdate();
