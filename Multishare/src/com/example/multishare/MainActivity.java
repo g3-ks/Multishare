@@ -3,10 +3,6 @@
  */
 package com.example.multishare;
 
-import org.brickred.socialauth.android.DialogListener;
-import org.brickred.socialauth.android.SocialAuthAdapter;
-import org.brickred.socialauth.android.SocialAuthAdapter.Provider;
-import org.brickred.socialauth.android.SocialAuthError;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,7 +45,9 @@ public class MainActivity extends ActionBarActivity {
 	
 	MyApplication myApp;
 
-	// uiHelper class helps keep track of a facebook session states between activities
+	/**
+	 *  UIHelper class helps keep track of a facebook session states between activities
+	 */
 	private UiLifecycleHelper uiHelper;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -77,7 +75,7 @@ public class MainActivity extends ActionBarActivity {
 		Log.d(TAG, "Main activity - oncreate");
 		setContentView(R.layout.main_layout);
 
-		// the user's way of choosing which social media to post to -- through these checkboxes
+		// User's way of choosing which social media to post to -- through these checkboxes
 		postToFacebook = (CheckBox) this.findViewById(R.id.checkBoxFacebook);
 		postToTwitter = (CheckBox) this.findViewById(R.id.checkBoxTwitter);
 		postToLinkedIn = (CheckBox) this.findViewById(R.id.checkBoxLinkedIn);
@@ -145,7 +143,7 @@ public class MainActivity extends ActionBarActivity {
 		super.onResume();
 		uiHelper.onResume();
 
-		// get the opened session from add Account after an app has been deleted and relaunched
+		// Get the opened session from add Account after an app has been deleted and relaunched
 		Session.openActiveSessionFromCache(this);
 		facebook_session = Session.getActiveSession();
 		if (facebook_session != null) {
@@ -168,7 +166,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 
-		// get the facebook user info from the add account activity
+		// Get the facebook user info from the add account activity
 		Intent intent = getIntent();
 		Log.d(TAG, "onResume");
 		Bundle bundle = intent.getExtras();
@@ -176,7 +174,6 @@ public class MainActivity extends ActionBarActivity {
 			Log.d(TAG, "On Resume - bundle is not null");
 			String jsonString = bundle.getString("user");
 			try {
-
 				if (jsonString != null) {
 					Log.d(TAG, "user string not null");
 					JSONObject jsonObj = new JSONObject(jsonString);
@@ -189,8 +186,6 @@ public class MainActivity extends ActionBarActivity {
 		} else {
 			Log.d(TAG, "On Resume - bundle is null");
 		}
-		// Twitter stuff
-
 	}
 
 	/**
