@@ -68,26 +68,20 @@ public class AddAccountActivity extends ActionBarActivity {
 	// lbl update
 	TextView lblUpdate;
 	TextView lblUserName;
-
-	// Progress dialog
-//	ProgressDialog pDialog;
-//
-//	// Twitter
-//	private static Twitter twitter;
-//	private static RequestToken requestToken;
 	
 	// Shared Preferences
 	private static SharedPreferences mSharedPreferences;
 	
 	
-	//-------------------------------------
-	
+	// Variable Declaration
 	private LoginButton authButton;
 
 	private Button twitter_button;
-
+	
 	private Button linked_in_button;
+	
 	private Button signOut_twitter;
+	
 	private Button signOut_linkedin;
 
 	private TextView user_name;
@@ -104,6 +98,7 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	MyApplication myApp;
 
+	// Callback from Facebook Login
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state,
@@ -112,6 +107,7 @@ public class AddAccountActivity extends ActionBarActivity {
 		}
 	};
 
+	// Check if Facebook is logged in
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
@@ -130,22 +126,21 @@ public class AddAccountActivity extends ActionBarActivity {
 		try {
 			info = getPackageManager().getPackageInfo("com.example.multishare",
 					PackageManager.GET_SIGNATURES);
+			
 			for (Signature signature : info.signatures) {
 				MessageDigest md;
 				md = MessageDigest.getInstance("SHA");
 				md.update(signature.toByteArray());
 				String something = new String(Base64.encode(md.digest(), 0));
-				// String something = new
-				// String(Base64.encodeBytes(md.digest()));
 				Log.e("hash key", something);
 			}
+			
 		} catch (NameNotFoundException e1) {
 			Log.e("name not found", e1.toString());
 		} catch (NoSuchAlgorithmException e) {
 			Log.e("no such an algorithm", e.toString());
 		} catch (Exception e) {
 			Log.e("exception", e.toString());
-
 		}
 
 		setContentView(R.layout.add_account_layout);
@@ -180,8 +175,8 @@ public class AddAccountActivity extends ActionBarActivity {
 		signOut_linkedin = (Button) findViewById(R.id.sign_out_button_linked_in);
 		signOut_linkedin.setEnabled(false);
 		signOut_linkedin.setVisibility(View.INVISIBLE);
-		// adapter.addCallBack(Provider.TWITTER, "http://google.com");
-
+		
+		// Adding our team's Twitter developer info
 		try {
 			twitter_adapter.addConfig(Provider.TWITTER,
 					"wuF5iNzZ8qgTTtkCggaisw",
@@ -190,6 +185,7 @@ public class AddAccountActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 
+		// Adding our team's LinkedIn developer info
 		try {
 			linked_in_adapter.addConfig(Provider.LINKEDIN, "bh82t52rdos6",
 					"zQ1LLrGbhDZ36fH8", null);
@@ -197,6 +193,7 @@ public class AddAccountActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 
+		// Adding twitter and linkedin buttons
 		twitter_button = (Button) findViewById(R.id.twitter_button);
 		linked_in_button = (Button) findViewById(R.id.linked_in_button);
 
@@ -205,6 +202,7 @@ public class AddAccountActivity extends ActionBarActivity {
 
 	}
 
+	// Displaying Facebook Login name
 	private void updateUI() {
 		Session session = Session.getActiveSession();
 
